@@ -1,5 +1,15 @@
-var ACTION_NAME = "find-winner";
+const ACTION_NAME = "find-winner";
 
+
+function disableManualScrolling() {
+    document.body.style.overflow = 'hidden';
+}
+
+function enableManualScrolling() {
+    document.body.style.overflow = 'auto';
+}
+
+const uuid = crypto.randomUUID();
 // Function to inject the spinner HTML into the webpage
 function injectSpinner() {
     var spinnerHtml = `
@@ -99,6 +109,7 @@ chrome.runtime.onMessage.addListener(async function (
     sendResponse
 ) {
     if (message.action === ACTION_NAME) {
+        disableManualScrolling();
         injectSpinner();
 
         while (!isDoneFetchingComments) {
@@ -117,6 +128,7 @@ chrome.runtime.onMessage.addListener(async function (
                 if (consecutiveFalseCount >= MAX_CONSECUTIVE_FALSE) {
                     isDoneFetchingComments = true;
                     console.log("Done fetching comments");
+                    enableManualScrolling();
                 }
             }
 
