@@ -141,7 +141,7 @@ chrome.runtime.onMessage.addListener(async function (message) {
     let currentHeight = document.body.scrollHeight;
     let isDoneFetchingComments = false;
     let consecutiveFalseCount = 0;
-    const MAX_CONSECUTIVE_FALSE = 1;
+    const MAX_CONSECUTIVE_FALSE = 10;
 
     if (message.action === btnRoll) {
         disableManualScrolling();
