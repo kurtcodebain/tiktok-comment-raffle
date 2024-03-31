@@ -102,6 +102,31 @@ function skeletonElementExists() {
     return res !== null;
 }
 
+function getUniqueEntries(arr) {
+    const entries = new Set();
+
+    arr.forEach(element => {
+        entries.add(element.querySelector('a[class*="StyledLink-StyledUserLinkName"]').href);
+    });
+
+    return entries;
+}
+
+function scrollToRandomComment(uniqueEntries) {
+    const uniqueEntriesArray = Array.from(uniqueEntries);
+    
+    const randomIndex = Math.floor(Math.random() * uniqueEntriesArray.length);
+    const randomUser = uniqueEntriesArray[randomIndex].split('/@')[1];
+    const commentElement = document.querySelector(`a[href*="${randomUser}"]`);
+    
+    if (commentElement) {
+        commentElement.parentElement.style.border = '2px solid #ff0066';
+        commentElement.parentElement.style.borderRadius = '5px';
+
+        commentElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
+
 let commentElements = getCommentElements(); // Initialize with initial comments
 
 let currentHeight = document.body.scrollHeight;
@@ -125,8 +150,14 @@ chrome.runtime.onMessage.addListener(async function (message) {
             } else {
                 consecutiveFalseCount++;
 
-                if (consecutiveFalseCount >= MAX_CONSECUTIVE_FALSE) {
+                //consecutiveFalseCount >= MAX_CONSECUTIVE_FALSE
+
+                if (!isDoneFetchingComments) {
                     isDoneFetchingComments = true;
+
+                    const uniqueEntries = getUniqueEntries(commentElements);
+                    scrollToRandomComment(uniqueEntries);
+
                     enableManualScrolling();
                     deleteSpinner();
                 }

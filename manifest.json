@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "Tanja's TikTok Raffle",
+    "name": "Tanja's TikTok Raffler",
     "description": "Fetches all comments, picks a random winner, jumps to it and highlights it.",
     "version": "0.1",
     "action": {
