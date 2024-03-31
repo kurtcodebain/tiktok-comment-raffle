@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Tanja's TikTok Raffler</title>
+  <title>Tanjas TikTok Raffler</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f0f2f5;
-      margin: 0;
-      padding: 0;
+      width: 400px; /* Set desired width */
+      margin: 0 auto; /* Center the container */
+      padding: 10px; /* Adjust as needed */
+      text-align: center; /* Center align content */
     }
     h1 {
       color: #ff0066;
-      text-align: center;
-      margin-top: 20px;
+      margin-top: 0px;
     }
-    #find-winner {
+    .btn {
       background-color: #ff0066;
       color: white;
       border: none;
@@ -23,17 +24,31 @@
       cursor: pointer;
       display: block;
       margin: 0 auto;
-      margin-top: 20px;
       font-weight: bold;
+      width: 200px; /* Set button width */
     }
-    #find-winner:hover {
+    .btn:hover {
       background-color: #cc0052;
+    }
+    .btn:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    .btn-container {
+      display: flex;
+    }
+    #winner {
+      color: #00cc66;
     }
   </style>
   <script src="finder.js"></script>
 </head>
 <body>
-  <h1>Tanja's TikTok Raffler</h1>
-  <button id="find-winner">FIND VINDER</button>
+  <h1>Tanjas TikTok Raffler</h1>
+  <h2 id="winner"></h2>
+  <div class="btn-container">
+    <button id="btn-roll" class="btn">ROLL</button>
+    <button id="btn-reroll" class="btn">REROLL</button>
+  </div>
 </body>
 </html>
