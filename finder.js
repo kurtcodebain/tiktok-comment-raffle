@@ -1,12 +1,11 @@
 const ACTION_NAME = "find-winner";
 
-
 function disableManualScrolling() {
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
 }
 
 function enableManualScrolling() {
-    document.body.style.overflow = 'auto';
+    document.body.style.overflow = "auto";
 }
 
 const uuid = crypto.randomUUID();
@@ -65,10 +64,18 @@ function injectSpinner() {
     document.body.appendChild(spinnerElement);
 }
 
+function deleteSpinner() {
+    const spinnerOverlay = document.getElementById("spinner-overlay");
+    if (spinnerOverlay) {
+        spinnerOverlay.remove();
+    }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     var scrollButton = document.getElementById(ACTION_NAME);
 
     scrollButton.addEventListener("click", function () {
+        window.close();
         scrollButton.disabled = true;
 
         // Send message to content script to scroll the webpage
@@ -103,41 +110,33 @@ let isDoneFetchingComments = false;
 let consecutiveFalseCount = 0;
 const MAX_CONSECUTIVE_FALSE = 10;
 
-chrome.runtime.onMessage.addListener(async function (
-    message,
-    sender,
-    sendResponse
-) {
+chrome.runtime.onMessage.addListener(async function (message) {
     if (message.action === ACTION_NAME) {
         disableManualScrolling();
         injectSpinner();
 
         while (!isDoneFetchingComments) {
-            // Scroll to the bottom of the webpage
             window.scrollTo(0, document.body.scrollHeight);
+
             await new Promise((resolve) => setTimeout(resolve, 1));
-            const newHeight = document.body.scrollHeight;
 
             if (skeletonElementExists()) {
-                // If the skeleton element exists, reset the consecutive false count
                 consecutiveFalseCount = 0;
             } else {
                 consecutiveFalseCount++;
 
-                // Check if consecutive false count has reached the threshold
                 if (consecutiveFalseCount >= MAX_CONSECUTIVE_FALSE) {
                     isDoneFetchingComments = true;
-                    console.log("Done fetching comments");
                     enableManualScrolling();
+                    deleteSpinner();
                 }
             }
 
+            const newHeight = document.body.scrollHeight;
+
             if (newHeight !== currentHeight) {
-                // Update comment elements if new comments are fetched
                 commentElements = getCommentElements();
                 currentHeight = newHeight;
-
-                console.log(`Fetched ${commentElements.length} comments`);
             }
         }
     }
