@@ -150,9 +150,7 @@ chrome.runtime.onMessage.addListener(async function (message) {
             } else {
                 consecutiveFalseCount++;
 
-                //consecutiveFalseCount >= MAX_CONSECUTIVE_FALSE
-
-                if (!isDoneFetchingComments) {
+                if (consecutiveFalseCount >= MAX_CONSECUTIVE_FALSE) {
                     isDoneFetchingComments = true;
 
                     const uniqueEntries = getUniqueEntries(commentElements);
