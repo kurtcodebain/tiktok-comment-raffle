@@ -13,6 +13,8 @@ function enableManualScrolling() {
 
 // Function to inject spinner HTML into the webpage
 function injectSpinner() {
+    disableManualScrolling();
+
     var spinnerHtml = `
        <div id="spinner-overlay" style="display: block;">
             <div class="spinner"></div>
@@ -70,6 +72,7 @@ function deleteSpinner() {
 
     if (spinnerOverlay) {
         spinnerOverlay.remove();
+        enableManualScrolling();
     }
 }
 
@@ -144,7 +147,6 @@ chrome.runtime.onMessage.addListener(async function (message) {
     const MAX_CONSECUTIVE_FALSE = 10;
 
     if (message.action === btnRoll) {
-        disableManualScrolling();
         injectSpinner();
 
         while (!isDoneFetchingComments) {
@@ -161,8 +163,6 @@ chrome.runtime.onMessage.addListener(async function (message) {
 
                     const uniqueEntries = getUniqueEntries(commentElements);
                     scrollToRandomComment(uniqueEntries);
-
-                    enableManualScrolling();
                     deleteSpinner();
                 }
             }
